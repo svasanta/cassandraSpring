@@ -1,11 +1,14 @@
 package com.san.cas.services;
 
 
+import java.time.temporal.TemporalField;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.datastax.driver.core.LocalDate;
 import com.san.cas.repositories.Status;
 import com.san.cas.repositories.StatusDAO;
 
@@ -20,7 +23,7 @@ public class UserstatusService {
 			throw new IllegalArgumentException("invalid id");
 		}
 		st.setStatusMsg(msg);
-		st.setUpdatedOn(java.time.LocalDate.now());		
+		st.setUpdatedOn(new Date() );		
 		statusDAO.update(st);
 		return statusDAO.get( UUID.fromString(id) );
 	}
@@ -28,10 +31,11 @@ public class UserstatusService {
 	public Status track(String id){
 		Status st = statusDAO.get(UUID.fromString(id));
 		if(st == null){
-			throw new IllegalArgumentException("invalid id");
+			st = new Status();
 		}
+		st.setUserId(UUID.fromString(id));
 		st.setStatusMsg("Created");
-		st.setUpdatedOn(java.time.LocalDate.now());		
+		st.setUpdatedOn(new Date());		
 		statusDAO.save(st);
 		return statusDAO.get(UUID.fromString(id));
 	}

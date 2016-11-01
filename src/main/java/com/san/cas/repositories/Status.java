@@ -1,7 +1,10 @@
 package com.san.cas.repositories;
 
-import java.time.LocalDate;
+
+import java.util.Date;
 import java.util.UUID;
+
+import com.datastax.driver.core.LocalDate;
 
 
 
@@ -9,7 +12,7 @@ public class Status {
   
   private UUID userId;
 
-  private LocalDate updatedOn;
+  private Date updatedOn;
 
   private String statusMsg;
 
@@ -25,11 +28,11 @@ public class Status {
     this.userId = userId;
   }
 
-  public LocalDate getUpdatedOn() {
+  public Date getUpdatedOn() {
     return updatedOn;
   }
 
-  public void setUpdatedOn(LocalDate updatedOn) {
+  public void setUpdatedOn(Date updatedOn) {
     this.updatedOn = updatedOn;
   }
 

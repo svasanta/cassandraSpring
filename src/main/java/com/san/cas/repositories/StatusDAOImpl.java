@@ -1,13 +1,17 @@
 package com.san.cas.repositories;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Repository;
 
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 
+@Repository
 public class StatusDAOImpl implements StatusDAO {
 
   private static PreparedStatement setStatusStatement = null;
@@ -24,7 +28,7 @@ public class StatusDAOImpl implements StatusDAO {
       statusMsg = new Status();
       for (Row row : rsStatusDetails) {
         statusMsg.setUserId(row.getUUID("userid"));
-        statusMsg.setUpdatedOn(row.getDate("updated_on"));
+        statusMsg.setUpdatedOn(row.getTimestamp("updated_on") );
         statusMsg.setStatusMsg(row.getString("status"));
       }
     }
@@ -65,7 +69,7 @@ public class StatusDAOImpl implements StatusDAO {
         "SELECT userid, updated_on, status FROM "
             + "apachecassandra.status_updates_by_user "
             + "WHERE userid = ? "
-            + " ORDER BY updated_ON DESC LIMIT 1;");
+            /*+ " ORDER BY updated_ON DESC LIMIT 1;"*/);
   }
 
   public static PreparedStatement getGetStatusStatement() {
@@ -87,8 +91,7 @@ public class StatusDAOImpl implements StatusDAO {
 	
 	@Override
 	public void update(Status st) {
-		ConnectionHelper.getSession().execute(getUpdateStatusStatement().bind(st.getSttausMsg(), st.getUserId() ));
-		
+		ConnectionHelper.getSession().execute(getUpdateStatusStatement().bind(st.getStatusMsg(), st.getUserId() ));		
 	}
 
 }
